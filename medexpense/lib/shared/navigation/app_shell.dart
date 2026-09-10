@@ -41,8 +41,6 @@ class _AppShellState extends ConsumerState<AppShell> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-
     return Scaffold(
       body: IndexedStack(
         // IndexedStack keeps state of each tab alive (no re-fetch on tab switch)

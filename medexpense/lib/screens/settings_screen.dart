@@ -103,7 +103,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Export failed: \$e')),
+          SnackBar(content: Text('Export failed: $e')),
         );
       }
     } finally {

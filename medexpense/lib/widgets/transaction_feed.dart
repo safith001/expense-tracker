@@ -106,7 +106,7 @@ class _EmptyFeed extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 40),
       child: Column(
         children: [
-          Text('🩺', style: const TextStyle(fontSize: 48)),
+          const Text('🩺', style: TextStyle(fontSize: 48)),
           const SizedBox(height: 16),
           Text(
             'No transactions this month',

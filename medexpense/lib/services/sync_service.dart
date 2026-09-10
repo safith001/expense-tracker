@@ -56,7 +56,7 @@ class SyncService {
     final currency = prefs.getString(_keyCurrency) ?? 'BYN';
 
     // Fetch unsynced transactions for this month
-    final transactions =
+    final List<Transaction> transactions =
         await DatabaseService.instance.getUnsyncedTransactionsForMonth(year, month);
 
     if (transactions.isEmpty) {
