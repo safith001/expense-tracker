@@ -60,6 +60,17 @@ class DatabaseService {
     );
   }
 
+  /// Updates an existing transaction in SQLite by its UUID.
+  Future<int> updateTransaction(Transaction t) async {
+    final db = await database;
+    return db.update(
+      'transactions',
+      t.toMap(),
+      where: 'id = ?',
+      whereArgs: [t.id],
+    );
+  }
+
   /// Deletes a transaction by its UUID id.
   Future<int> deleteTransaction(String id) async {
     final db = await database;

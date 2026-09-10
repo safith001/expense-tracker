@@ -8,10 +8,12 @@ import '../models/transaction_model.dart';
 import '../providers/transaction_provider.dart';
 import '../providers/settings_provider.dart';
 
-/// Quick-add bottom sheet.
+/// Quick-add and edit bottom sheet.
 /// No system keyboard — uses a fully custom numeric pad per MOBILE_RULES.md §3.
 class AddTransactionSheet extends ConsumerStatefulWidget {
-  const AddTransactionSheet({super.key});
+  final Transaction? initialTransaction;
+
+  const AddTransactionSheet({super.key, this.initialTransaction});
 
   @override
   ConsumerState<AddTransactionSheet> createState() =>
@@ -35,6 +37,19 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
   @override
   void initState() {
     super.initState();
+    if (widget.initialTransaction != null) {
+      final init = widget.initialTransaction!;
+      _amountDisplay = init.amount % 1 == 0
+          ? init.amount.toInt().toString()
+          : init.amount.toString();
+      _type = init.type;
+      _selectedCategory = init.category;
+      _selectedPayment = init.paymentMethod;
+      _selectedDate = init.parsedDate;
+      if (init.note != null) {
+        _noteController.text = init.note!;
+      }
+    }
     _slideCtrl = AnimationController(
       duration: const Duration(milliseconds: 280),
       vsync: this,
@@ -95,19 +110,38 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
     setState(() => _isSaving = true);
 
     final currency = ref.read(activeCurrencyProvider);
-    final transaction = Transaction.create(
-      amount: amount,
-      currency: currency,
-      type: _type,
-      category: _selectedCategory,
-      paymentMethod: _selectedPayment,
-      date: _selectedDate,
-      note: _noteController.text.trim().isEmpty
-          ? null
-          : _noteController.text.trim(),
-    );
 
-    await ref.read(transactionNotifierProvider.notifier).addTransaction(transaction);
+    if (widget.initialTransaction != null) {
+      final old = widget.initialTransaction!;
+      final updated = Transaction(
+        id: old.id,
+        amount: amount,
+        currency: currency,
+        type: _type,
+        category: _selectedCategory,
+        paymentMethod: _selectedPayment,
+        date: _selectedDate.toIso8601String(),
+        note: _noteController.text.trim().isEmpty
+            ? null
+            : _noteController.text.trim(),
+        isSynced: 0,
+        createdAt: old.createdAt,
+      );
+      await ref.read(transactionNotifierProvider.notifier).updateTransaction(updated);
+    } else {
+      final transaction = Transaction.create(
+        amount: amount,
+        currency: currency,
+        type: _type,
+        category: _selectedCategory,
+        paymentMethod: _selectedPayment,
+        date: _selectedDate,
+        note: _noteController.text.trim().isEmpty
+            ? null
+            : _noteController.text.trim(),
+      );
+      await ref.read(transactionNotifierProvider.notifier).addTransaction(transaction);
+    }
 
     if (mounted) Navigator.of(context).pop();
   }
@@ -195,7 +229,9 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Log Transaction',
+                        widget.initialTransaction != null
+                            ? 'Edit Transaction'
+                            : 'Log Transaction',
                         style: GoogleFonts.plusJakartaSans(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -390,7 +426,9 @@ class _AddTransactionSheetState extends ConsumerState<AddTransactionSheet>
                                   strokeWidth: 2, color: Colors.white),
                             )
                           : Text(
-                              'Save Transaction',
+                              widget.initialTransaction != null
+                                  ? 'Update Transaction'
+                                  : 'Save Transaction',
                               style: GoogleFonts.plusJakartaSans(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,

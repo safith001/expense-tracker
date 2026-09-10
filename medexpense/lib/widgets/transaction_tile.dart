@@ -9,11 +9,13 @@ import '../models/transaction_model.dart';
 class TransactionTile extends StatelessWidget {
   final Transaction transaction;
   final VoidCallback? onDelete;
+  final VoidCallback? onTap;
 
   const TransactionTile({
     super.key,
     required this.transaction,
     this.onDelete,
+    this.onTap,
   });
 
   @override
@@ -65,13 +67,16 @@ class TransactionTile extends StatelessWidget {
       onDismissed: (_) => onDelete?.call(),
       child: Container(
         margin: const EdgeInsets.only(bottom: 8),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-        decoration: BoxDecoration(
+        child: Material(
           color: isDark ? const Color(0xFF2D3748) : Colors.white,
           borderRadius: BorderRadius.circular(16),
-        ),
-        child: Row(
-          children: [
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+              child: Row(
+                children: [
             // Category icon circle
             Container(
               width: 44,
@@ -170,7 +175,10 @@ class TransactionTile extends StatelessWidget {
           ],
         ),
       ),
-    );
+    ),
+  ),
+),
+);
   }
 
   // Maps MBBS categories to emojis for quick visual scanning

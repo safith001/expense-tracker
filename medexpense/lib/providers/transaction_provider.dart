@@ -43,6 +43,20 @@ class TransactionNotifier extends StateNotifier<AsyncValue<void>> {
     }
   }
 
+  /// Updates an existing transaction and refreshes providers.
+  Future<void> updateTransaction(Transaction transaction) async {
+    state = const AsyncValue.loading();
+    try {
+      await DatabaseService.instance.updateTransaction(transaction);
+      _ref.invalidate(allTransactionsProvider);
+      _ref.invalidate(currentMonthTransactionsProvider);
+      _ref.invalidate(dashboardSummaryProvider);
+      state = const AsyncValue.data(null);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+
   /// Deletes a transaction and refreshes providers.
   Future<void> deleteTransaction(String id) async {
     state = const AsyncValue.loading();

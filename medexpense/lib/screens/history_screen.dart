@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../models/transaction_model.dart';
 import '../providers/transaction_provider.dart';
 import '../providers/settings_provider.dart';
+import '../widgets/add_transaction_sheet.dart';
 import '../widgets/transaction_tile.dart';
 
 /// Full transaction history screen — shows all transactions, grouped by month.
@@ -124,6 +125,13 @@ class HistoryScreen extends ConsumerWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         child: TransactionTile(
                           transaction: t,
+                          onTap: () => showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            builder: (_) =>
+                                AddTransactionSheet(initialTransaction: t),
+                          ),
                           onDelete: () => ref
                               .read(transactionNotifierProvider.notifier)
                               .deleteTransaction(t.id),

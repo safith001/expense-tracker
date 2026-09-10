@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 import '../models/transaction_model.dart';
 import '../providers/transaction_provider.dart';
+import 'add_transaction_sheet.dart';
 import 'transaction_tile.dart';
 
 /// Groups transactions into Today / Yesterday / [Day Name] / [Date] headers.
@@ -69,6 +70,13 @@ class TransactionFeed extends ConsumerWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: TransactionTile(
                         transaction: t,
+                        onTap: () => showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          backgroundColor: Colors.transparent,
+                          builder: (_) =>
+                              AddTransactionSheet(initialTransaction: t),
+                        ),
                         onDelete: () => ref
                             .read(transactionNotifierProvider.notifier)
                             .deleteTransaction(t.id),
