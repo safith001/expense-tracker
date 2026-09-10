@@ -1,0 +1,56 @@
+name: Build Android APK (MedExpense)
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch: # Allows 1-click manual trigger in GitHub Actions
+
+jobs:
+  build:
+    name: Build Debug APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Java JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.3'
+          channel: 'stable'
+          cache: true
+
+      - name: Verify Flutter Installation
+        run: flutter --version
+
+      - name: Ensure Android Wrapper & Platform Files
+        working-directory: ./medexpense
+        run: flutter create --platforms=android --org com.medexpense .
+
+      - name: Install Dependencies
+        working-directory: ./medexpense
+        run: flutter pub get
+
+      - name: Static Analysis
+        working-directory: ./medexpense
+        run: flutter analyze
+
+      - name: Build Debug APK
+        working-directory: ./medexpense
+        run: flutter build apk --debug
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: medexpense-debug-apk
+          path: medexpense/build/app/outputs/flutter-apk/app-debug.apk
+          retention-days: 14

@@ -1,0 +1,43 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Visual Studio Code
+.vscode/
+
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub-cache/
+.pub/
+build/
+medexpense/build/
+medexpense/.dart_tool/
+
+# Android
+**/android/**/gradle-app.setting
+**/android/**/local.properties
+**/android/**/generated/
+**/android/**/out/
+**/android/captures/
+**/android/gradle/
+**/android/.gradle/
+**/android/app/build/
+
+# Local archives
+*.zip
+*.tar.gz
