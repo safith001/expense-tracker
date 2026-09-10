@@ -1,4 +1,4 @@
-package com.medexpense.medexpense
+package com.medexpense.app
 
 import io.flutter.embedding.android.FlutterActivity
 

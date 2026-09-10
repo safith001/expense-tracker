@@ -21,11 +21,19 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize SQLite database
-  await DatabaseService.instance.database;
+  try {
+    await DatabaseService.instance.database;
+  } catch (e) {
+    debugPrint('Database initialization warning: $e');
+  }
 
   // Register WorkManager for daily end-of-month sync check
-  await Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
-  await BackgroundWorker.registerPeriodicTask();
+  try {
+    await Workmanager().initialize(callbackDispatcher, isInDebugMode: false);
+    await BackgroundWorker.registerPeriodicTask();
+  } catch (e) {
+    debugPrint('WorkManager initialization warning: $e');
+  }
 
   runApp(
     // ProviderScope is the root of Riverpod — wraps the entire widget tree

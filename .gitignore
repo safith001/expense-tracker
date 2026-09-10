@@ -41,3 +41,6 @@ medexpense/.dart_tool/
 # Local archives
 *.zip
 *.tar.gz
+
+*.apk
+

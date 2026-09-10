@@ -19,7 +19,7 @@ while ($true) {
         $e = [math]::Max(0, 30 - $f)
         $bar = ("#" * $f) + ("-" * $e)
         
-        Clear-Host
+        try { Clear-Host } catch {}
         Write-Host "============================================================" -ForegroundColor Cyan
         Write-Host "         Flutter SDK -- Chrome-Style Download Monitor        " -ForegroundColor Yellow
         Write-Host "============================================================" -ForegroundColor Cyan
