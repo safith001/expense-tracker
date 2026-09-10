@@ -32,12 +32,6 @@ jobs:
       - name: Verify Flutter Installation
         run: flutter --version
 
-      - name: Ensure Android Platform Scaffold
-        working-directory: ./medexpense
-        run: |
-          flutter create --platforms=android --org com.medexpense .
-          rm -rf test
-
       - name: Install Dependencies
         working-directory: ./medexpense
         run: flutter pub get
